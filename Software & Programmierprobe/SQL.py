@@ -280,39 +280,6 @@ def bullshitters():
             key=lambda entry: (entry["fame_level_numeric"], -entry["user"].date_joined.timestamp())
         )
     return(negative_users_dict)
-    
-    #########################
-    # T3 Alternative
-    # add your code here
-    # from collections import defaultdict
-
-    # result = defaultdict(list)
-
-    # # Get all Fame entries with negative fame levels
-    # negative_fame_entries = (
-    #     Fame.objects
-    #     .select_related("user", "expertise_area", "fame_level")
-    #     .filter(fame_level__numeric_value__lt=0)
-    # )
-
-    # # Group users per expertise area
-    # for fame_entry in negative_fame_entries:
-    #     result[fame_entry.expertise_area].append({
-    #         "user": fame_entry.user,
-    #         "fame_level_numeric": fame_entry.fame_level.numeric_value,
-    #     })
-
-    # # Sort each list by fame level ascending, then date_joined descending
-    # for expertise_area in result:
-    #     result[expertise_area].sort(
-    #         key=lambda entry: (entry["fame_level_numeric"], -entry["user"].date_joined.timestamp())
-    #     )
-
-    # return dict(result)
-    #########################
-
-
-
 
 
 def join_community(user: SocialNetworkUsers, community: ExpertiseAreas):
@@ -320,23 +287,16 @@ def join_community(user: SocialNetworkUsers, community: ExpertiseAreas):
     community.
     """
     pass
-    #########################
-    # add your code here
     user.communities.add(community)
     user.save()
-    #########################
 
 
 
 def leave_community(user: SocialNetworkUsers, community: ExpertiseAreas):
     """Leave a specified community."""
     pass
-    #########################
-    # add your code here
     user.communities.remove(community)
     user.save()
-    #########################
-
 
 
 def similar_users(user: SocialNetworkUsers):
@@ -391,54 +351,4 @@ def similar_users(user: SocialNetworkUsers):
     return(qs)
 
     pass
-    #########################
-    # add your code here
-    # ui_fame = {
-    #     fame.expertise_area_id: fame.fame_level.numeric_value
-    #     for fame in Fame.objects.filter(user=user)
-    # }
-
-    # Ei = list(ui_fame.keys())
-
-    # if not Ei:
-    #     return SocialNetworkUsers.objects.none()
-
-    # similarity_scores = []
-
-    # other_users = SocialNetworkUsers.objects.exclude(id=user.id)
-
-    # for uj in other_users:
-    #     uj_fame = {
-    #         fame.expertise_area_id: fame.fame_level.numeric_value
-    #         for fame in Fame.objects.filter(user=uj)
-    #     }
-
-    #     match_count = 0
-    #     for e in Ei:
-    #         fame_ui = ui_fame[e]
-    #         fame_uj = uj_fame.get(e, float('inf'))  # ∞ if uj has no fame in this area
-    #         if abs(fame_ui - fame_uj) <= 100:
-    #             match_count += 1
-
-    #     score = match_count / len(Ei)
-    #     if score > 0:
-    #         similarity_scores.append((uj, score))
-
-    # # Sort: first by similarity DESC, then by date_joined DESC
-    # similarity_scores.sort(key=lambda x: (-x[1], -x[0].date_joined.timestamp()))
-
-    # # Create lookup for fast access
-    # score_lookup = {usr.id: score for usr, score in similarity_scores}
-    # user_ids_ordered = [usr.id for usr, _ in similarity_scores]
-
-    # # Query actual user objects
-    # result = list(SocialNetworkUsers.objects.filter(id__in=user_ids_ordered))
-
-    # # Preserve order and attach .similarity field
-    # result.sort(key=lambda u: (-score_lookup[u.id], -u.date_joined.timestamp()))
-    # for u in result:
-    #     u.similarity = score_lookup[u.id]
-
-    # return result
-    #########################
 
